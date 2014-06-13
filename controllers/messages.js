@@ -30,22 +30,20 @@ redisCommands.forEach(function(command) {
   db[command] = thunk(db[command]);
 }); 
 
-var messages = [
-  { id: 0, message: 'Koa next generation web framework for node.js' },
-  { id: 1, message: 'Koa is a new web framework designed by the team behind Express' }
-];
-
 module.exports.list = function *list() {
   var res = yield db.lrange('dots', 0, -1);
   this.body = res.map(JSON.parse);
 };
 
-module.exports.fetch = function *fetch(id) {
-  var message = messages[id];
+module.exports.fetch = function *fetch(sid) {
+  console.log(sid);
+  var id = parseInt(this.params.id);
+  console.log('Dot: ' + id);
+  var message = yield db.lindex('dots', id);
   if (!message) {
     this.throw(404, 'message with id = ' + id + ' was not found');
   }
-  this.body = yield message;
+  this.body = JSON.parse(message);
 };
 
 module.exports.create = function *create() {
