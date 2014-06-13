@@ -1,0 +1,23 @@
+{
+  "name": "koa",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node --harmony app.js",
+    "test": "mocha --harmony"
+  },
+  "dependencies": {
+    "koa": "^0.6.0",
+    "koa-logger": "^1.2.0",
+    "koa-static": "^1.4.5",
+    "koa-router": "~3.1.4",
+    "koa-compress": "^1.0.6",
+    "co-body": "0.0.1",
+    "redis": "~0.10.3",
+    "thunkify": "~2.1.2"
+  },
+  "devDependencies": {
+    "supertest": "^0.12.1",
+    "mocha": "^1.18.2"
+  }
+}
