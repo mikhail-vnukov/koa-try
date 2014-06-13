@@ -47,7 +47,9 @@ module.exports.fetch = function *fetch(sid) {
 };
 
 module.exports.create = function *create() {
+  console.log(this);
   var body = yield parse.json(this);
-  yield db.rpush('dots', JSON.stringify( {'message': body.message, 'ballast': new Date()}));
+  console.log(body);
+  yield db.rpush('dots', JSON.stringify( {'message': body, 'ballast': new Date()}));
   this.response.body = 'OK';
 };

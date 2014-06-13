@@ -4,9 +4,10 @@ var messages = require('./controllers/messages')
 	,logger = require('koa-logger')
 	,router = require('koa-router')
 	,koa = require('koa')
+	,cors = require('koa-cors')
 	,app = module.exports = koa();
 
-// Logger
+app.use(cors());
 app.use(logger());
 app.use(router(app));
 

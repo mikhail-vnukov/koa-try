@@ -14,7 +14,8 @@
     "koa-compress": "^1.0.6",
     "co-body": "0.0.1",
     "redis": "~0.10.3",
-    "thunkify": "~2.1.2"
+    "thunkify": "~2.1.2",
+    "koa-cors": "0.0.13"
   },
   "devDependencies": {
     "supertest": "^0.12.1",
