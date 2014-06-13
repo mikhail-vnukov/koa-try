@@ -2,14 +2,31 @@
 
 var parse = require('co-body');
 var redis = require('redis');
-var redisCommands = require('redis/lib/commands.js');
 var thunk = require('thunkify');
 
 var db = redis.createClient();
 
-redisCommands.forEach(function(fullCommand) {
-  var command = fullCommand.split(' ')[0];
-  console.log(command);
+var redisCommands = [
+    'lrange',
+    'lindex',
+    'linsert',
+    'llen',
+    'lpop',
+    'lpush',
+    'lpushx',
+    'lrem',
+    'lset',
+    'ltrim',
+    'mget',
+    'migrate',
+    'monitor',
+    'move',
+    'mset',
+    'msetnx',
+    'rpush'
+];
+
+redisCommands.forEach(function(command) {
   db[command] = thunk(db[command]);
 }); 
 
@@ -19,10 +36,7 @@ var messages = [
 ];
 
 module.exports.list = function *list() {
-  console.log('Listing all dots');
-  console.log(db.lrange.toString()); 
   var res = yield db.lrange('dots', 0, -1);
-  console.log('Dots: ' + res);
   this.body = res.map(JSON.parse);
 };
 
