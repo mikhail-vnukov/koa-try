@@ -28,7 +28,7 @@ var redisCommands = [
 
 redisCommands.forEach(function(command) {
   db[command] = thunk(db[command]);
-}); 
+});
 
 module.exports.list = function *list() {
   var res = yield db.lrange('dots', 0, -1);
@@ -50,6 +50,6 @@ module.exports.create = function *create() {
   console.log(this);
   var body = yield parse.json(this);
   console.log(body);
-  yield db.rpush('dots', JSON.stringify( {'message': body, 'ballast': new Date()}));
+  yield db.rpush('dots', JSON.stringify(body));
   this.response.body = 'OK';
 };
