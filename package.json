@@ -15,7 +15,9 @@
     "co-body": "0.0.1",
     "redis": "~0.10.3",
     "thunkify": "~2.1.2",
-    "koa-cors": "0.0.13"
+    "koa-cors": "0.0.13",
+    "co-mongo": "0.0.2",
+    "co": "~3.0.6"
   },
   "devDependencies": {
     "supertest": "^0.12.1",

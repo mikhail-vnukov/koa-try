@@ -1,55 +1,38 @@
 'use strict';
 
 var parse = require('co-body');
-var redis = require('redis');
-var thunk = require('thunkify');
+var co = require('co');
+var util = require('../utils/utils.js');
+//var mongo = require('../utils/mongo-utils.js');
+var comongo = require('co-mongo');
 
-var db = redis.createClient();
+var collection;
+co(function*() {
+	var db = yield comongo.connect('mongodb://127.0.0.1:27017/test');
+	collection = yield db.collection('dots');
+})();
 
-var redisCommands = [
-    'lrange',
-    'lindex',
-    'linsert',
-    'llen',
-    'lpop',
-    'lpush',
-    'lpushx',
-    'lrem',
-    'lset',
-    'ltrim',
-    'mget',
-    'migrate',
-    'monitor',
-    'move',
-    'mset',
-    'msetnx',
-    'rpush'
-];
-
-redisCommands.forEach(function(command) {
-  db[command] = thunk(db[command]);
-});
 
 module.exports.list = function *list() {
-  var res = yield db.lrange('dots', 0, -1);
-  this.body = res.map(JSON.parse);
+	this.body = yield collection.find().toArray();
 };
 
 module.exports.fetch = function *fetch(sid) {
-  console.log(sid);
-  var id = parseInt(this.params.id);
-  console.log('Dot: ' + id);
-  var message = yield db.lindex('dots', id);
-  if (!message) {
-    this.throw(404, 'message with id = ' + id + ' was not found');
-  }
-  this.body = JSON.parse(message);
+	console.log(sid);
+	var id = parseInt(this.params.id);
+	console.log('Dot: ' + id);
+
+	this.body = yield collection.findOne({_id: id});
+
+	if (!this.body) {
+		this.throw(404, 'message with id = ' + id + ' was not found');
+	}
 };
 
 module.exports.create = function *create() {
-  console.log(this);
-  var body = yield parse.json(this);
-  console.log(body);
-  yield db.rpush('dots', JSON.stringify(body));
-  this.response.body = 'OK';
+	var body = yield parse.json(this);
+	console.log(body);
+	yield collection.save({ _id: util.getDateOnly(new Date()), data: body});
+
+	this.response.body = 'OK';
 };
