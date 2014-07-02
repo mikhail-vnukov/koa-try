@@ -12,8 +12,9 @@ app.use(logger());
 app.use(router(app));
 
 app.get('/dots', messages.list);
-app.post('/dots', messages.create);
+// app.post('/dots', messages.create);
 app.get('/dot/:id', messages.fetch);
+app.put('/dot/:id', messages.create);
 
 
 // Compress

@@ -2,7 +2,6 @@
 
 var parse = require('co-body');
 var co = require('co');
-var util = require('../utils/utils.js');
 //var mongo = require('../utils/mongo-utils.js');
 var comongo = require('co-mongo');
 
@@ -17,8 +16,7 @@ module.exports.list = function *list() {
 	this.body = yield collection.find().toArray();
 };
 
-module.exports.fetch = function *fetch(sid) {
-	console.log(sid);
+module.exports.fetch = function *fetch() {
 	var id = parseInt(this.params.id);
 	console.log('Dot: ' + id);
 
@@ -30,9 +28,12 @@ module.exports.fetch = function *fetch(sid) {
 };
 
 module.exports.create = function *create() {
+	var id = parseInt(this.params.id);
+	if(!id) {
+		this.throw(400, 'Need to define id');
+	}
 	var body = yield parse.json(this);
-	console.log(body);
-	yield collection.save({ _id: util.getDateOnly(new Date()), data: body});
+	yield collection.save({ _id: id, data: body});
 
 	this.response.body = 'OK';
 };
